@@ -1,6 +1,7 @@
 package co.example.lutfillahmafazi.notes.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,8 +20,10 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import co.example.lutfillahmafazi.notes.Constant;
 import co.example.lutfillahmafazi.notes.DBNoteHelper;
 import co.example.lutfillahmafazi.notes.R;
+import co.example.lutfillahmafazi.notes.UpdateNoteActivity;
 import co.example.lutfillahmafazi.notes.model.NotesModel;
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> {
@@ -44,7 +47,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
 
     @Override
     // berguna untuk menghandle semua item
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int i) {
+    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
         // Mengambil data dari DataNoteList
         final NotesModel dataNotes = dataNotesList.get(i);
 
@@ -54,6 +57,22 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
         // Menampilkan ke widget
         viewHolder.tvJudul.setText(dataNotes.getJudul());
         viewHolder.tvIsi.setText(dataNotes.getIsi());
+
+        // Membuat OnCLick untuk item
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Membuat Object Bundle
+                bundle = new Bundle();
+                bundle.putInt(Constant.KEY_ID, dataNotes.getId_());
+                bundle.putString(Constant.KEY_JUDUL,dataNotes.getJudul());
+                bundle.putString(Constant.KEY_ISI,dataNotes.getIsi());
+
+                // Berpindah halaman dan membawa data
+                context.startActivity(new Intent(context, UpdateNoteActivity.class).putExtras(bundle));
+            }
+        });
+
         // Membuat onclick pada overvlow / titik 3
         viewHolder.overflow.setOnClickListener(new View.OnClickListener() {
             @Override
